@@ -9,8 +9,8 @@ import java.util.Scanner;
 
 public class ClientSide {
     
-    final static String HOST = "104.209.44.90";
-    final static int PORT = 4444;
+    private final static String HOST = "104.209.44.90";
+    private final static int PORT = 4444;
 
     public static void main(String[] args) {
         try {
