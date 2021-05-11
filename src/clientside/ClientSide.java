@@ -13,6 +13,7 @@ public class ClientSide {
     private final static int PORT = 4444;
 
     public static void main(String[] args) {
+        new jHome().setVisible(true);
         try {
             Socket server = new Socket(HOST, PORT);
             BufferedReader in = new BufferedReader(new InputStreamReader(server.getInputStream()));
