@@ -1,6 +1,7 @@
 package clientside;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -23,7 +24,9 @@ public class ClientSide {
             String message = sc.nextLine();
             out.println(message);
             System.out.println(in.readLine());
-        } catch (Exception e) {}
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
     
 }
