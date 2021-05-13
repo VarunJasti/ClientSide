@@ -8,15 +8,14 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class ClientSide {
+    
+    private final static String HOST = "104.209.44.90";
+    private final static int PORT = 4444;
 
     public static void main(String[] args) {
-        if (args.length < 2) {
-            return;
-        }
-        String host = args[0];
-        int port = Integer.parseInt(args[1]);
+        new jHome().setVisible(true);
         try {
-            Socket server = new Socket(host, port);
+            Socket server = new Socket(HOST, PORT);
             BufferedReader in = new BufferedReader(new InputStreamReader(server.getInputStream()));
             PrintWriter out = new PrintWriter(server.getOutputStream(), true);
             Scanner sc = new Scanner(System.in);
