@@ -16,6 +16,16 @@ public class Menu extends javax.swing.JPanel {
      */
     public Menu() {
         initComponents();
+        usernameField.setSelectionStart(0);
+        usernameField.setSelectionEnd(usernameField.getText().length());
+    }
+    
+    public void joinLobby() {
+        if (ClientSide.getCon() && ClientSide.newUser(usernameField.getText())) {
+            ClientSide.home.showPanel(1);
+        } else {
+            //Some sort of error message here
+        }
     }
 
     /**
@@ -38,6 +48,11 @@ public class Menu extends javax.swing.JPanel {
         });
 
         usernameField.setText("Username");
+        usernameField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                usernameFieldActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -64,12 +79,12 @@ public class Menu extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void joinLobbyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_joinLobbyButtonActionPerformed
-        if (ClientSide.newUser(usernameField.getText())) {
-            ClientSide.home.showPanel(1);
-        } else {
-            //Some sort of error message here
-        }
+        joinLobby();
     }//GEN-LAST:event_joinLobbyButtonActionPerformed
+
+    private void usernameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameFieldActionPerformed
+        joinLobby();
+    }//GEN-LAST:event_usernameFieldActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

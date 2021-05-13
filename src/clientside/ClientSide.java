@@ -5,9 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ClientSide {
     
@@ -19,11 +16,8 @@ public class ClientSide {
     public static jHome home = new jHome();
 
     public static void main(String[] args) {
-        if (!getCon()) {
-            return;
-        }
         home.setVisible(true);
-        home.showPanel(1);
+        home.showPanel(0);
 //        try {
 //            Socket server = new Socket(HOST, PORT);
 //            BufferedReader in = new BufferedReader(new InputStreamReader(server.getInputStream()));
@@ -52,7 +46,7 @@ public class ClientSide {
     }
     
     public static boolean newUser(String user) {
-        out.write("user," + user);
+        out.println("user,"+user);
         try {
             return in.readLine().equals("connected");
         } catch (IOException e) {
