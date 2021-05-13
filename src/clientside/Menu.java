@@ -27,30 +27,53 @@ public class Menu extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
+        joinLobbyButton = new javax.swing.JButton();
+        usernameField = new javax.swing.JTextField();
 
-        jButton1.setText("jButton1");
+        joinLobbyButton.setText("Join Lobby");
+        joinLobbyButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                joinLobbyButtonActionPerformed(evt);
+            }
+        });
+
+        usernameField.setText("Username");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(162, 162, 162)
+                .addComponent(joinLobbyButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(166, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(161, 161, 161))
+                .addContainerGap(137, Short.MAX_VALUE)
+                .addComponent(usernameField, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(134, 134, 134))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(196, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(81, 81, 81))
+                .addGap(79, 79, 79)
+                .addComponent(usernameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 95, Short.MAX_VALUE)
+                .addComponent(joinLobbyButton)
+                .addGap(83, 83, 83))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void joinLobbyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_joinLobbyButtonActionPerformed
+        if (ClientSide.newUser(usernameField.getText())) {
+            ClientSide.home.showPanel(1);
+        } else {
+            //Some sort of error message here
+        }
+    }//GEN-LAST:event_joinLobbyButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton joinLobbyButton;
+    private javax.swing.JTextField usernameField;
     // End of variables declaration//GEN-END:variables
 }
