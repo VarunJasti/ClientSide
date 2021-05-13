@@ -5,17 +5,47 @@
  */
 package clientside;
 
+import java.util.ArrayList;
+import javax.swing.JPanel;
+
 /**
  *
  * @author andre
  */
 public class jHome extends javax.swing.JFrame {
+    
+    
+    private ArrayList<JPanel> list = new ArrayList<>();
 
     /**
      * Creates new form jHome
      */
     public jHome() {
         initComponents();
+        loadPanels();
+        showPanel(0);
+        this.jPanel1.setVisible(false);
+    }
+    
+    public void loadPanels() {
+        Menu menu = new Menu();
+        list.add(menu);
+        Lobby lobby = new Lobby();
+        list.add(lobby);
+        for (int i = 0; i < list.size(); i++) {
+            this.add(list.get(i));
+            list.get(i).setLocation(0, 0);
+            list.get(i).setSize(this.getContentPane().getWidth(), this.getContentPane().getHeight());
+            list.get(i).setVisible(true);
+        }
+        this.pack();
+    }
+    
+    public void showPanel(int n) {
+        for (int i = 0; i < list.size(); i++) {
+            list.get(i).setVisible(false);
+        }
+        list.get(n).setVisible(true);
     }
 
     /**
@@ -28,42 +58,20 @@ public class jHome extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLableTitle = new javax.swing.JLabel();
-        jButtonToPoker = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(133, 220, 186));
         jPanel1.setPreferredSize(new java.awt.Dimension(512, 384));
-
-        jLableTitle.setText("Home Screen");
-
-        jButtonToPoker.setText("Poker");
-        jButtonToPoker.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonToPokerActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(227, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButtonToPoker)
-                    .addComponent(jLableTitle))
-                .addGap(222, 222, 222))
+            .addGap(0, 512, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(jLableTitle)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 258, Short.MAX_VALUE)
-                .addComponent(jButtonToPoker)
-                .addGap(66, 66, 66))
+            .addGap(0, 384, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -85,10 +93,6 @@ public class jHome extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButtonToPokerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonToPokerActionPerformed
-        new jPoker().setVisible(true);
-    }//GEN-LAST:event_jButtonToPokerActionPerformed
 
     /**
      * @param args the command line arguments
@@ -126,8 +130,6 @@ public class jHome extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonToPoker;
-    private javax.swing.JLabel jLableTitle;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }
