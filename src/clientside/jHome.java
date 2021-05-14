@@ -47,6 +47,10 @@ public class jHome extends javax.swing.JFrame {
         }
         list.get(n).setVisible(true);
     }
+    
+    public ArrayList<JPanel> getList() {
+        return list;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

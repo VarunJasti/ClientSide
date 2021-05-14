@@ -13,7 +13,7 @@ public class ClientSide {
     private static Socket server;
     private static BufferedReader in;
     private static PrintWriter out;
-    public static jHome home = new jHome();
+    private static jHome home = new jHome();
 
     public static void main(String[] args) {
         home.setVisible(true);
@@ -30,6 +30,19 @@ public class ClientSide {
 //        } catch (IOException e) {
 //            System.out.println(e.getMessage());
 //        }
+    }
+    
+    public static String read() {
+        try {
+            return in.readLine();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+    
+    public static jHome getHome() {
+        return home;
     }
     
     public static boolean getCon()

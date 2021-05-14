@@ -18,6 +18,10 @@ public class Lobby extends javax.swing.JPanel {
         initComponents();
         rosterField.setEditable(false);
     }
+    
+    public void loadRoster(String roster) {
+        rosterField.setText(roster);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

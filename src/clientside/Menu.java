@@ -5,6 +5,8 @@
  */
 package clientside;
 
+import javax.swing.JPanel;
+
 /**
  *
  * @author Varun Jasti
@@ -22,7 +24,12 @@ public class Menu extends javax.swing.JPanel {
     
     public void joinLobby() {
         if (ClientSide.getCon() && ClientSide.newUser(usernameField.getText())) {
-            ClientSide.home.showPanel(1);
+            String roster = ClientSide.read();
+            JPanel panel = ClientSide.getHome().getList().get(1);
+            if (roster != null && panel instanceof Lobby) {
+                ((Lobby)panel).loadRoster(roster);
+            }
+            ClientSide.getHome().showPanel(1);
         } else {
             //Some sort of error message here
         }
