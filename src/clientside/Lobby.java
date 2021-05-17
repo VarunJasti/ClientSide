@@ -20,6 +20,7 @@ public class Lobby extends javax.swing.JPanel {
     }
     
     public void loadRoster(String roster) {
+        rosterField.setText("");
         rosterField.setText(roster);
     }
 
