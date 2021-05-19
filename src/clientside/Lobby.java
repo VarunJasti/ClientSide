@@ -20,12 +20,17 @@ public class Lobby extends javax.swing.JPanel {
         initComponents();
     }
     
-    public void loadRoster(ArrayList<String> roster) {
-        String names = "";
-        for (int i = 0; i < roster.size(); i++) {
-            names += roster.get(i) + "\n";
+    public void loadRoster(String[] roster) {
+        String names = "<html>";
+        for (int i = 0; i < roster.length; i++) {
+            if (i == 0) {
+                names += roster[i];
+            } else {
+                names += "<br/>" + roster[i];
+            }
         }
-        listOfNames.setText(names);
+        names += "<html>";
+        namesJLabel.setText(names);
     }
 
     /**
@@ -37,19 +42,19 @@ public class Lobby extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        listOfNames = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        namesJLabel = new javax.swing.JLabel();
+        lobbyLabel = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(133, 220, 186));
 
-        listOfNames.setFont(new java.awt.Font("Rockwell", 0, 18)); // NOI18N
-        listOfNames.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        listOfNames.setText("list of names");
-        listOfNames.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        namesJLabel.setFont(new java.awt.Font("Rockwell", 0, 18)); // NOI18N
+        namesJLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        namesJLabel.setText("list of names");
+        namesJLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
-        jLabel1.setFont(new java.awt.Font("Rockwell", 0, 24)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Players in Lobby");
+        lobbyLabel.setFont(new java.awt.Font("Rockwell", 0, 24)); // NOI18N
+        lobbyLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lobbyLabel.setText("Players in Lobby");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -57,27 +62,27 @@ public class Lobby extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(listOfNames, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(namesJLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(100, 100, 100)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lobbyLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(100, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
+                .addComponent(lobbyLabel)
                 .addGap(18, 18, 18)
-                .addComponent(listOfNames, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(namesJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(66, 66, 66))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel listOfNames;
+    private javax.swing.JLabel lobbyLabel;
+    private javax.swing.JLabel namesJLabel;
     // End of variables declaration//GEN-END:variables
 }

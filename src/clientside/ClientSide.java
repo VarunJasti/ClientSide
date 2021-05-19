@@ -8,16 +8,16 @@ import java.net.Socket;
 
 public class ClientSide {
     
-    private final static String HOST = "104.209.44.90";
+    private final static String HOST = "localhost";
     private final static int PORT = 4444;
     private static Socket server;
     private static BufferedReader in;
     private static PrintWriter out;
-    private static jHome home = new jHome();
+    private static final jHome HOME = new jHome();
 
     public static void main(String[] args) {
-        home.setVisible(true);
-        home.showPanel(0);
+        HOME.setVisible(true);
+        HOME.showPanel(0);
 //        try {
 //            Socket server = new Socket(HOST, PORT);
 //            BufferedReader in = new BufferedReader(new InputStreamReader(server.getInputStream()));
@@ -42,7 +42,7 @@ public class ClientSide {
     }
     
     public static jHome getHome() {
-        return home;
+        return HOME;
     }
     
     public static boolean getCon()

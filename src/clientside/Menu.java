@@ -24,7 +24,8 @@ public class Menu extends javax.swing.JPanel {
     
     public void joinLobby() {
         if (ClientSide.getCon() && ClientSide.newUser(usernameField.getText())) {
-            String roster = ClientSide.read();
+            String rosterList = ClientSide.read();
+            String[] roster = rosterList.split(",");
             JPanel panel = ClientSide.getHome().getList().get(1);
             if (roster != null && panel instanceof Lobby) {
                 ((Lobby)panel).loadRoster(roster);
