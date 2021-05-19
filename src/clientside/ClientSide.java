@@ -8,7 +8,7 @@ import java.net.Socket;
 
 public class ClientSide {
     
-    private final static String HOST = "40.112.182.24";
+    private final static String HOST = "104.209.44.90";
     private final static int PORT = 4444;
     private static Socket server;
     private static BufferedReader in;
