@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class ClientSide {
     
-    private final static String HOST = "localhost";
+    private final static String HOST = "104.209.44.90";
     private final static int PORT = 4444;
     private static Socket server;
     private static BufferedReader in;
