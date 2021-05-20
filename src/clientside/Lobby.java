@@ -1,6 +1,7 @@
 package clientside;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Lobby extends javax.swing.JPanel {
@@ -16,13 +17,13 @@ public class Lobby extends javax.swing.JPanel {
         listen.start();
     }
     
-    public void loadRoster(String[] roster) {
+    public void loadRoster() {
         String names = "<html>";
-        for (int i = 0; i < roster.length; i++) {
+        for (int i = 0; i < ClientSide.getList().size(); i++) {
             if (i == 0) {
-                names += roster[i];
+                names += ClientSide.getList().get(i).getName();
             } else {
-                names += "<br/>" + roster[i];
+                names += "<br/>" + ClientSide.getList().get(i).getName();
             }
         }
         names += "</html>";
@@ -30,23 +31,31 @@ public class Lobby extends javax.swing.JPanel {
     }
     
     public void newUser(String name) {
-        namesJLabel.setText(namesJLabel.getText().replace("</html>", "") + "<br/>" + name + "</html>");
+        ClientSide.getList().add(new User(name));
+        loadRoster();
     }
     
     public void userQuit(String name) {
-        String[] names = namesJLabel.getText().replace("<html>", "").replace("</html>", "").split("<br/>");
-        String text = "<html>";
-        for (String s : names) {
-            if (!s.equals(name)) {
-                if (text.length() > 6) {
-                    text += "<br/>" + s;
-                } else {
-                    text += s;
-                }
+        for (User user : ClientSide.getList()) {
+            if (user.equals(name)) {
+                ClientSide.getList().remove(user);
+                loadRoster();
+                return;
             }
         }
-        text += "</html>";
-        namesJLabel.setText(text);
+//        String[] names = namesJLabel.getText().replace("<html>", "").replace("</html>", "").split("<br/>");
+//        String text = "<html>";
+//        for (String s : names) {
+//            if (!s.equals(name)) {
+//                if (text.length() > 6) {
+//                    text += "<br/>" + s;
+//                } else {
+//                    text += s;
+//                }
+//            }
+//        }
+//        text += "</html>";
+//        namesJLabel.setText(text);
     }
     
     class Listen extends Thread {

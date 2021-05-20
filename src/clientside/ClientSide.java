@@ -5,19 +5,35 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class ClientSide {
     
-    private final static String HOST = "104.209.44.90";
+    private final static String HOST = "localhost";
     private final static int PORT = 4444;
     private static Socket server;
     private static BufferedReader in;
     private static PrintWriter out;
     private static final jHome HOME = new jHome();
+    private static ArrayList<User> list = new ArrayList<>();
 
     public static void main(String[] args) {
         HOME.setVisible(true);
         HOME.showPanel(0);
+    }
+    
+    public static void loadUsers()
+    {
+        list.clear();
+        String rosterList = ClientSide.read();
+        String[] roster = rosterList.split(",");
+        for (String user : roster) {
+            list.add(new User(user));
+        }
+    }
+    
+    public static ArrayList<User> getList() {
+        return list;
     }
 
     public static BufferedReader getIn() {
