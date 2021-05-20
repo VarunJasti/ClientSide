@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 public class ClientSide {
     
@@ -85,7 +86,13 @@ public class ClientSide {
     public static boolean newUser(String user) {
         out.println("user,"+user);
         try {
-            return in.readLine().equals("connected");
+            String input = in.readLine();
+            if (input.equals("connected")) {
+                return true;
+            } else if (input.equals("nametaken")){
+                JOptionPane.showMessageDialog(HOME, "Name Already Taken");
+                return false;
+            }
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
