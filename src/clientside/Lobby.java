@@ -1,6 +1,7 @@
 package clientside;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Lobby extends javax.swing.JPanel {
     
@@ -8,10 +9,10 @@ public class Lobby extends javax.swing.JPanel {
     
     public Lobby() {
         initComponents();
-        listen = new Listen();
     }
     
     public void startListening() {
+        listen = new Listen();
         listen.start();
     }
     
@@ -50,10 +51,17 @@ public class Lobby extends javax.swing.JPanel {
     
     class Listen extends Thread {
         
+        private final AtomicBoolean running = new AtomicBoolean(false);
+        
+        public void stop1() {
+            running.set(false);
+        }
+        
         @Override
         public void run() {
+            running.set(true);
             try {
-                while (true) {
+                while (running.get()) {
                     String input = ClientSide.getIn().readLine();
                     if (input.startsWith("newuser,")) {
                         newUser(input.split(",")[1]);
@@ -131,6 +139,7 @@ public class Lobby extends javax.swing.JPanel {
     private void quitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitButtonActionPerformed
         ClientSide.write("quit");
         ClientSide.disconnect();
+        listen.stop1();
         ClientSide.getHome().showPanel(0);
     }//GEN-LAST:event_quitButtonActionPerformed
 
