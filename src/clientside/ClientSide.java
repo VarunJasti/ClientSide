@@ -18,18 +18,6 @@ public class ClientSide {
     public static void main(String[] args) {
         HOME.setVisible(true);
         HOME.showPanel(0);
-//        try {
-//            Socket server = new Socket(HOST, PORT);
-//            BufferedReader in = new BufferedReader(new InputStreamReader(server.getInputStream()));
-//            PrintWriter out = new PrintWriter(server.getOutputStream(), true);
-//            Scanner sc = new Scanner(System.in);
-//            System.out.print("Send Message >>>  ");
-//            String message = sc.nextLine();
-//            out.println(message);
-//            System.out.println(in.readLine());
-//        } catch (IOException e) {
-//            System.out.println(e.getMessage());
-//        }
     }
 
     public static BufferedReader getIn() {

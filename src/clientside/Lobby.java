@@ -3,18 +3,18 @@ package clientside;
 import java.io.IOException;
 
 public class Lobby extends javax.swing.JPanel {
-    
+
     private Listen listen;
 
     public Lobby() {
         initComponents();
         listen = new Listen();
     }
-    
+
     public void startListening() {
         listen.start();
     }
-    
+
     public void loadRoster(String[] roster) {
         String names = "<html>";
         for (int i = 0; i < roster.length; i++) {
@@ -26,20 +26,23 @@ public class Lobby extends javax.swing.JPanel {
         }
         names += "</html>";
         namesJLabel.setText(names);
-        System.out.println(namesJLabel.getText());
     }
-    
+
     public void newUser(String name) {
         namesJLabel.setText(namesJLabel.getText().replace("</html>", "") + "<br/>" + name + "</html>");
     }
-    
+
     class Listen extends Thread {
+
         @Override
         public void run() {
             try {
-                String input = ClientSide.getIn().readLine();
-                if (input.startsWith("newuser,")) {
-                    newUser(input.split(",")[1]);
+                while (true) {
+                    String input = ClientSide.getIn().readLine();
+                    System.out.println(input);
+                    if (input.startsWith("newuser,")) {
+                        newUser(input.split(",")[1]);
+                    }
                 }
             } catch (IOException e) {
                 System.out.println(e.getMessage());
