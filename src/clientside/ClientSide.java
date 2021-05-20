@@ -37,6 +37,18 @@ public class ClientSide {
         return null;
     }
     
+    public static void disconnect() {
+        try {
+            server.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    public static void write(String s) {
+        out.println(s);
+    }
+    
     public static jHome getHome() {
         return HOME;
     }

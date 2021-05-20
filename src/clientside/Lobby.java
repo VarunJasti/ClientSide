@@ -3,18 +3,18 @@ package clientside;
 import java.io.IOException;
 
 public class Lobby extends javax.swing.JPanel {
-
+    
     private Listen listen;
-
+    
     public Lobby() {
         initComponents();
         listen = new Listen();
     }
-
+    
     public void startListening() {
         listen.start();
     }
-
+    
     public void loadRoster(String[] roster) {
         String names = "<html>";
         for (int i = 0; i < roster.length; i++) {
@@ -27,21 +27,38 @@ public class Lobby extends javax.swing.JPanel {
         names += "</html>";
         namesJLabel.setText(names);
     }
-
+    
     public void newUser(String name) {
         namesJLabel.setText(namesJLabel.getText().replace("</html>", "") + "<br/>" + name + "</html>");
     }
-
+    
+    public void userQuit(String name) {
+        String[] names = namesJLabel.getText().replace("<html>", "").replace("</html>", "").split("<br/>");
+        String text = "<html>";
+        for (String s : names) {
+            if (!s.equals(name)) {
+                if (text.length() > 6) {
+                    text += "<br/>" + s;
+                } else {
+                    text += s;
+                }
+            }
+        }
+        text += "</html>";
+        namesJLabel.setText(text);
+    }
+    
     class Listen extends Thread {
-
+        
         @Override
         public void run() {
             try {
                 while (true) {
                     String input = ClientSide.getIn().readLine();
-                    System.out.println(input);
                     if (input.startsWith("newuser,")) {
                         newUser(input.split(",")[1]);
+                    } else if (input.startsWith("quit,")) {
+                        userQuit(input.split(",")[1]);
                     }
                 }
             } catch (IOException e) {
@@ -61,6 +78,7 @@ public class Lobby extends javax.swing.JPanel {
 
         namesJLabel = new javax.swing.JLabel();
         lobbyLabel = new javax.swing.JLabel();
+        quitButton = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(133, 220, 186));
 
@@ -73,18 +91,29 @@ public class Lobby extends javax.swing.JPanel {
         lobbyLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lobbyLabel.setText("Players in Lobby");
 
+        quitButton.setText("Quit");
+        quitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                quitButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(namesJLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
                 .addGap(100, 100, 100)
                 .addComponent(lobbyLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(100, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(namesJLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(quitButton)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -93,13 +122,22 @@ public class Lobby extends javax.swing.JPanel {
                 .addComponent(lobbyLabel)
                 .addGap(18, 18, 18)
                 .addComponent(namesJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(66, 66, 66))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(quitButton)
+                .addGap(32, 32, 32))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void quitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitButtonActionPerformed
+        ClientSide.write("quit");
+        ClientSide.disconnect();
+        ClientSide.getHome().showPanel(0);
+    }//GEN-LAST:event_quitButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel lobbyLabel;
     private javax.swing.JLabel namesJLabel;
+    private javax.swing.JButton quitButton;
     // End of variables declaration//GEN-END:variables
 }
