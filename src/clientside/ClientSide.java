@@ -31,6 +31,14 @@ public class ClientSide {
 //            System.out.println(e.getMessage());
 //        }
     }
+
+    public static BufferedReader getIn() {
+        return in;
+    }
+
+    public static PrintWriter getOut() {
+        return out;
+    }
     
     public static String read() {
         try {

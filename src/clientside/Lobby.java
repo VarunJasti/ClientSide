@@ -1,23 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package clientside;
 
-import java.util.ArrayList;
+import java.io.IOException;
 
-/**
- *
- * @author Varun Jasti
- */
 public class Lobby extends javax.swing.JPanel {
+    
+    private Listen listen;
 
-    /**
-     * Creates new form Lobby
-     */
     public Lobby() {
         initComponents();
+        listen = new Listen();
+    }
+    
+    public void startListening() {
+        listen.start();
     }
     
     public void loadRoster(String[] roster) {
@@ -29,8 +24,27 @@ public class Lobby extends javax.swing.JPanel {
                 names += "<br/>" + roster[i];
             }
         }
-        names += "<html>";
+        names += "</html>";
         namesJLabel.setText(names);
+        System.out.println(namesJLabel.getText());
+    }
+    
+    public void newUser(String name) {
+        namesJLabel.setText(namesJLabel.getText().replace("</html>", "") + "<br/>" + name + "</html>");
+    }
+    
+    class Listen extends Thread {
+        @Override
+        public void run() {
+            try {
+                String input = ClientSide.getIn().readLine();
+                if (input.startsWith("newuser,")) {
+                    newUser(input.split(",")[1]);
+                }
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     /**

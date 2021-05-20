@@ -29,6 +29,7 @@ public class Menu extends javax.swing.JPanel {
             JPanel panel = ClientSide.getHome().getList().get(1);
             if (roster != null && panel instanceof Lobby) {
                 ((Lobby)panel).loadRoster(roster);
+                ((Lobby)panel).startListening();
             }
             ClientSide.getHome().showPanel(1);
         } else {
