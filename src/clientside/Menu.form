@@ -17,25 +17,23 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="162" max="-2" attributes="0"/>
-              <Component id="joinLobbyButton" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace pref="137" max="32767" attributes="0"/>
-              <Component id="usernameField" min="-2" pref="129" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="134" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="324" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="joinLobbyButton" min="-2" max="-2" attributes="0"/>
+                  <Component id="usernameField" min="-2" pref="129" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace pref="347" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <EmptySpace min="-2" pref="79" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="135" max="-2" attributes="0"/>
               <Component id="usernameField" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="95" max="32767" attributes="0"/>
+              <EmptySpace pref="190" max="32767" attributes="0"/>
               <Component id="joinLobbyButton" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="83" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="82" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>

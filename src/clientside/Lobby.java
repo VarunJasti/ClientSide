@@ -1,7 +1,6 @@
 package clientside;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Lobby extends javax.swing.JPanel {
@@ -43,19 +42,6 @@ public class Lobby extends javax.swing.JPanel {
                 return;
             }
         }
-//        String[] names = namesJLabel.getText().replace("<html>", "").replace("</html>", "").split("<br/>");
-//        String text = "<html>";
-//        for (String s : names) {
-//            if (!s.equals(name)) {
-//                if (text.length() > 6) {
-//                    text += "<br/>" + s;
-//                } else {
-//                    text += s;
-//                }
-//            }
-//        }
-//        text += "</html>";
-//        namesJLabel.setText(text);
     }
     
     class Listen extends Thread {
@@ -76,6 +62,9 @@ public class Lobby extends javax.swing.JPanel {
                         newUser(input.split(",")[1]);
                     } else if (input.startsWith("quit,")) {
                         userQuit(input.split(",")[1]);
+                    } else if (input.equals("start")) {
+                        ClientSide.getHome().showPanel(2);
+                        stop1();
                     }
                 }
             } catch (IOException e) {
@@ -96,6 +85,7 @@ public class Lobby extends javax.swing.JPanel {
         namesJLabel = new javax.swing.JLabel();
         lobbyLabel = new javax.swing.JLabel();
         quitButton = new javax.swing.JButton();
+        startButton = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(133, 220, 186));
 
@@ -115,33 +105,43 @@ public class Lobby extends javax.swing.JPanel {
             }
         });
 
+        startButton.setText("Start");
+        startButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                startButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(100, 100, 100)
-                .addComponent(lobbyLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(100, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(namesJLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(quitButton)))
+                    .addComponent(namesJLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 780, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(quitButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(startButton)))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(lobbyLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(299, 299, 299))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(42, 42, 42)
                 .addComponent(lobbyLabel)
-                .addGap(18, 18, 18)
-                .addComponent(namesJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(quitButton)
-                .addGap(32, 32, 32))
+                .addComponent(namesJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(quitButton)
+                    .addComponent(startButton))
+                .addGap(25, 25, 25))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -152,10 +152,15 @@ public class Lobby extends javax.swing.JPanel {
         ClientSide.getHome().showPanel(0);
     }//GEN-LAST:event_quitButtonActionPerformed
 
+    private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
+        ClientSide.write("start");
+    }//GEN-LAST:event_startButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel lobbyLabel;
     private javax.swing.JLabel namesJLabel;
     private javax.swing.JButton quitButton;
+    private javax.swing.JButton startButton;
     // End of variables declaration//GEN-END:variables
 }

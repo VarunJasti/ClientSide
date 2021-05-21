@@ -28,10 +28,9 @@ public class jHome extends javax.swing.JFrame {
     }
     
     public void loadPanels() {
-        Menu menu = new Menu();
-        list.add(menu);
-        Lobby lobby = new Lobby();
-        list.add(lobby);
+        list.add(new Menu());
+        list.add(new Lobby());
+        list.add(new Poker());
         for (int i = 0; i < list.size(); i++) {
             this.add(list.get(i));
             list.get(i).setLocation(0, 0);
@@ -83,7 +82,7 @@ public class jHome extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(0, 288, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
         );
@@ -92,7 +91,7 @@ public class jHome extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 66, Short.MAX_VALUE))
         );
 
         pack();
