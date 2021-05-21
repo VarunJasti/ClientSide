@@ -91,6 +91,11 @@ public class ClientSide {
                 return true;
             } else if (input.equals("nametaken")){
                 JOptionPane.showMessageDialog(HOME, "Name Already Taken");
+                disconnect();
+                return false;
+            } else if (input.equals("lobbyfull")) {
+                JOptionPane.showMessageDialog(HOME, "Lobby Full");
+                disconnect();
                 return false;
             }
         } catch (IOException e) {
