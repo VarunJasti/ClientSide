@@ -5,17 +5,114 @@
  */
 package clientside;
 
+import java.awt.Font;
+import java.util.ArrayList;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+
+
 /**
  *
  * @author Varun Jasti
  */
 public class Poker extends javax.swing.JPanel {
+    
+    private ArrayList<JLabel> list = new ArrayList<>();
 
     /**
      * Creates new form Poker
      */
     public Poker() {
         initComponents();
+        ImageIcon img = new ImageIcon(new ImageIcon(ClientSide.class.getResource("Cards/back.png")).getImage().getScaledInstance(65, 100, java.awt.Image.SCALE_SMOOTH));
+        JLabel card11 = new JLabel(img);
+        card11.setSize(65,100);
+        card11.setLocation(650, 335);
+        add(card11);
+        createLabels();
+    }
+    
+    public void createLabels() {
+        int width = 140;
+        int height = 15;
+        Font f = new java.awt.Font("Rockwell", 0, 14);
+        JLabel p1Label = new JLabel();
+        p1Label.setSize(width, height);
+        p1Label.setLocation(650, 315);
+        p1Label.setFont(f);
+        p1Label.setHorizontalAlignment(SwingConstants.CENTER);
+        add(p1Label);
+        list.add(p1Label);
+        JLabel p2Label = new JLabel();
+        p2Label.setSize(width, height);
+        p2Label.setLocation(650, 190);
+        p2Label.setFont(f);
+        p2Label.setHorizontalAlignment(SwingConstants.CENTER);
+        add(p2Label);
+        list.add(p2Label);
+        JLabel p3Label = new JLabel();
+        p3Label.setSize(width, height);
+        p3Label.setLocation(650, 65);
+        p3Label.setFont(f);
+        p3Label.setHorizontalAlignment(SwingConstants.CENTER);
+        add(p3Label);
+        list.add(p3Label);
+        JLabel p4Label = new JLabel();
+        p4Label.setSize(width, height);
+        p4Label.setLocation(480, 10);
+        p4Label.setFont(f);
+        p4Label.setHorizontalAlignment(SwingConstants.CENTER);
+        add(p4Label);
+        list.add(p4Label);
+        JLabel p5Label = new JLabel();
+        p5Label.setSize(width, height);
+        p5Label.setLocation(330, 10);
+        p5Label.setFont(f);
+        p5Label.setHorizontalAlignment(SwingConstants.CENTER);
+        add(p5Label);
+        list.add(p5Label);
+        JLabel p6Label = new JLabel();
+        p6Label.setSize(width, height);
+        p6Label.setLocation(180, 10);
+        p6Label.setFont(f);
+        p6Label.setHorizontalAlignment(SwingConstants.CENTER);
+        add(p6Label);
+        list.add(p6Label);
+        JLabel p7Label = new JLabel();
+        p7Label.setSize(width, height);
+        p7Label.setLocation(10, 65);
+        p7Label.setFont(f);
+        p7Label.setHorizontalAlignment(SwingConstants.CENTER);
+        add(p7Label);
+        list.add(p7Label);
+        JLabel p8Label = new JLabel();
+        p8Label.setSize(width, height);
+        p8Label.setLocation(10, 190);
+        p8Label.setFont(f);
+        p8Label.setHorizontalAlignment(SwingConstants.CENTER);
+        add(p8Label);
+        list.add(p8Label);
+        JLabel p9Label = new JLabel();
+        p9Label.setSize(width, height);
+        p9Label.setLocation(10, 315);
+        p9Label.setFont(f);
+        p9Label.setHorizontalAlignment(SwingConstants.CENTER);
+        add(p9Label);
+        list.add(p9Label);
+    }
+    
+    public void loadPlayers() {
+        clearLabel();
+        for (int i = 0; i < ClientSide.getList().size(); i++) {
+            list.get(i).setText(ClientSide.getList().get(i).getName());
+        }
+    }
+    
+    private void clearLabel() {
+        for (JLabel label : list) {
+            label.setText("");
+        }
     }
 
     /**

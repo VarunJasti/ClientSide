@@ -101,6 +101,10 @@ public class ClientSide {
                 JOptionPane.showMessageDialog(HOME, "Lobby Full");
                 disconnect();
                 return false;
+            } else if (input.equals("playing")) {
+                JOptionPane.showMessageDialog(HOME, "Game Already Started");
+                disconnect();
+                return false;
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());

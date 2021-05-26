@@ -14,6 +14,10 @@ public class User {
         this.name = name;
         this.mainPlayer = mainPlayer;
     }
+
+    public boolean isMainPlayer() {
+        return mainPlayer;
+    }
     
     public boolean equals(String name) {
         return this.name.equals(name);

@@ -3,6 +3,7 @@ package clientside;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 public class Lobby extends javax.swing.JPanel {
     
@@ -20,11 +21,13 @@ public class Lobby extends javax.swing.JPanel {
     public void loadRoster() {
         String names = "<html>";
         for (int i = 0; i < ClientSide.getList().size(); i++) {
+            if (ClientSide.getList().get(i).isMainPlayer()) names += "<b>";
             if (i == 0) {
                 names += ClientSide.getList().get(i).getName();
             } else {
                 names += "<br/>" + ClientSide.getList().get(i).getName();
             }
+            if (ClientSide.getList().get(i).isMainPlayer()) names += "</b>";
         }
         names += "</html>";
         namesJLabel.setText(names);
@@ -64,7 +67,11 @@ public class Lobby extends javax.swing.JPanel {
                     } else if (input.startsWith("quit,")) {
                         userQuit(input.split(",")[1]);
                     } else if (input.equals("start")) {
-                        ClientSide.getHome().showPanel(2);
+                        JPanel p = ClientSide.getHome().getList().get(2);
+                        if (p instanceof Poker) {
+                            ((Poker)p).loadPlayers();
+                            ClientSide.getHome().showPanel(2);
+                        }
                         stop1();
                     } else if (input.equals("fewplayers")) {
                         JOptionPane.showMessageDialog(ClientSide.getHome(), "Not Enough Players");
