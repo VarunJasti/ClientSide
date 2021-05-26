@@ -28,8 +28,12 @@ public class ClientSide {
         list.clear();
         String rosterList = ClientSide.read();
         String[] roster = rosterList.split(",");
-        for (String user : roster) {
-            list.add(new User(user));
+        for (int i = 0; i < roster.length; i++) {
+            if (i == roster.length - 1) {
+                list.add(new User(roster[i], true));
+            } else {
+                list.add(new User(roster[i], false));
+            }
         }
     }
     

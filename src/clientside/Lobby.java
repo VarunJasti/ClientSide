@@ -2,6 +2,7 @@ package clientside;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
+import javax.swing.JOptionPane;
 
 public class Lobby extends javax.swing.JPanel {
     
@@ -65,6 +66,8 @@ public class Lobby extends javax.swing.JPanel {
                     } else if (input.equals("start")) {
                         ClientSide.getHome().showPanel(2);
                         stop1();
+                    } else if (input.equals("fewplayers")) {
+                        JOptionPane.showMessageDialog(ClientSide.getHome(), "Not Enough Players");
                     }
                 }
             } catch (IOException e) {
