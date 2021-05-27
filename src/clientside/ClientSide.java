@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 
 public class ClientSide {
     
-    private final static String HOST = "104.209.44.90";
+    private final static String HOST = "localhost";
     private final static int PORT = 4444;
     private static Socket server;
     private static BufferedReader in;
@@ -21,6 +21,18 @@ public class ClientSide {
     public static void main(String[] args) {
         HOME.setVisible(true);
         HOME.showPanel(0);
+    }
+    
+    public static void mainPlayerToEnd() {
+        User temp = null;
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).isMainPlayer()) {
+                temp = list.get(i);
+                list.remove(list.get(i));
+                break;
+            }
+        }
+        list.add(temp);
     }
     
     public static void loadUsers()
