@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
-
 
 /**
  *
@@ -27,6 +27,8 @@ public class Poker extends javax.swing.JPanel {
     private JLabel myCard1;
     private JLabel myCard2;
     private Listen listen;
+    private boolean bettable = false;
+    private double callValue = 0;
 
     /**
      * Creates new form Poker
@@ -125,12 +127,12 @@ public class Poker extends javax.swing.JPanel {
         for (JLabel label : labelList) {
             JLabel card1 = new JLabel();
             card1.setSize(width, height);
-            card1.setLocation(label.getLocation().x, label.getLocation().y+20);
+            card1.setLocation(label.getLocation().x, label.getLocation().y + 20);
             add(card1);
             cardList.add(card1);
             JLabel card2 = new JLabel();
             card2.setSize(width, height);
-            card2.setLocation(label.getLocation().x+75, label.getLocation().y+20);
+            card2.setLocation(label.getLocation().x + 75, label.getLocation().y + 20);
             add(card2);
             cardList.add(card2);
         }
@@ -161,14 +163,14 @@ public class Poker extends javax.swing.JPanel {
         clearLabel();
         ImageIcon img = new ImageIcon(new ImageIcon(ClientSide.class.getResource("Cards/back.png")).getImage().getScaledInstance(65, 100, java.awt.Image.SCALE_SMOOTH));
         ClientSide.mainPlayerToEnd();
-        for (int i = 0; i < ClientSide.getList().size()-1; i++) {
+        for (int i = 0; i < ClientSide.getList().size() - 1; i++) {
             labelList.get(i).setText(ClientSide.getList().get(i).getName() + ": " + NumberFormat.getCurrencyInstance().format(ClientSide.getList().get(i).getBet()));
-            int j = i*2;
+            int j = i * 2;
             cardList.get(j).setIcon(img);
-            cardList.get(j+1).setIcon(img);
+            cardList.get(j + 1).setIcon(img);
         }
-        money.setText(NumberFormat.getCurrencyInstance().format(ClientSide.getList().get(ClientSide.getList().size()-1).getMoney()));
-        bet.setText(NumberFormat.getCurrencyInstance().format(ClientSide.getList().get(ClientSide.getList().size()-1).getBet()));
+        money.setText(NumberFormat.getCurrencyInstance().format(ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney()));
+        bet.setText(NumberFormat.getCurrencyInstance().format(ClientSide.getList().get(ClientSide.getList().size() - 1).getBet()));
     }
     
     private void clearLabel() {
@@ -180,11 +182,17 @@ public class Poker extends javax.swing.JPanel {
         }
     }
     
+    public void loadBetAndMoney() {
+        bet.setText(NumberFormat.getCurrencyInstance().format(ClientSide.getList().get(ClientSide.getList().size() - 1).getBet()));
+        money.setText(NumberFormat.getCurrencyInstance().format(ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney()));
+    }
+    
     public void setMyCards() {
         
     }
     
     class Listen extends Thread {
+        
         private final AtomicBoolean running = new AtomicBoolean(false);
         
         public void stop1() {
@@ -201,13 +209,27 @@ public class Poker extends javax.swing.JPanel {
                         String[] s = input.split("\\|");
                         myCard1.setIcon(new ImageIcon(new ImageIcon(ClientSide.class.getResource("Cards/" + s[1] + ".png")).getImage().getScaledInstance(98, 150, java.awt.Image.SCALE_SMOOTH)));
                         myCard2.setIcon(new ImageIcon(new ImageIcon(ClientSide.class.getResource("Cards/" + s[2] + ".png")).getImage().getScaledInstance(98, 150, java.awt.Image.SCALE_SMOOTH)));
+                    } else if (input.startsWith("bet")) {
+                        bettable = true;
+                        betLabel.setText("<html><b>Bet</b></html>");
+                        callValue = Double.parseDouble(input.split(",")[1]);
+                        callButton.setText("Call: " + NumberFormat.getCurrencyInstance().format(callValue));
+                    } else if (input.startsWith("userbet")) {
+                        for (int i = 0; i < ClientSide.getList().size(); i++) {
+                            if (ClientSide.getList().get(i).getName().equals(input.split(",")[1])) {
+                                if (i != ClientSide.getList().size() - 1) {
+                                    ClientSide.getList().get(i).setBet(Double.parseDouble(input.split(",")[2]));
+                                    labelList.get(i).setText(ClientSide.getList().get(i).getName() + ": " + NumberFormat.getCurrencyInstance().format(ClientSide.getList().get(i).getBet()));
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
         }
-        
     }
 
     /**
@@ -223,6 +245,11 @@ public class Poker extends javax.swing.JPanel {
         moneyLabel = new javax.swing.JLabel();
         betLabel = new javax.swing.JLabel();
         bet = new javax.swing.JLabel();
+        raiseButton = new javax.swing.JButton();
+        lowerButton = new javax.swing.JButton();
+        callButton = new javax.swing.JButton();
+        foldButton = new javax.swing.JButton();
+        betButton = new javax.swing.JButton();
 
         money.setFont(new java.awt.Font("Rockwell", 0, 14)); // NOI18N
         money.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -240,22 +267,67 @@ public class Poker extends javax.swing.JPanel {
         bet.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         bet.setText("jLabel1");
 
+        raiseButton.setText("+0.10");
+        raiseButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                raiseButtonActionPerformed(evt);
+            }
+        });
+
+        lowerButton.setText("-0.10");
+        lowerButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lowerButtonActionPerformed(evt);
+            }
+        });
+
+        callButton.setText("Call");
+        callButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                callButtonActionPerformed(evt);
+            }
+        });
+
+        foldButton.setText("Fold");
+        foldButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                foldButtonActionPerformed(evt);
+            }
+        });
+
+        betButton.setText("Bet");
+        betButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                betButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(297, 297, 297)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(moneyLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(betLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(297, 297, 297)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(moneyLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(betLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(money, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(bet, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(money, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(bet, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(297, Short.MAX_VALUE))
+                        .addGap(513, 513, 513)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lowerButton, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(raiseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(callButton, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(foldButton, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(betButton, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(160, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -268,15 +340,76 @@ public class Poker extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(money)
                     .addComponent(bet))
-                .addContainerGap(167, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(raiseButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lowerButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(callButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(foldButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(betButton)
+                .addContainerGap(22, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void raiseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_raiseButtonActionPerformed
+        if (bettable) {
+            if (ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney() >= 0.1) {
+                ClientSide.getList().get(ClientSide.getList().size() - 1).setBet(ClientSide.getList().get(ClientSide.getList().size() - 1).getBet() + 0.1);
+                ClientSide.getList().get(ClientSide.getList().size() - 1).setMoney(ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney() - 0.1);
+                loadBetAndMoney();
+            }
+        }
+    }//GEN-LAST:event_raiseButtonActionPerformed
+
+    private void lowerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lowerButtonActionPerformed
+        if (bettable) {
+            if (ClientSide.getList().get(ClientSide.getList().size() - 1).getBet() >= 0.1) {
+                ClientSide.getList().get(ClientSide.getList().size() - 1).setBet(ClientSide.getList().get(ClientSide.getList().size() - 1).getBet() - 0.1);
+                ClientSide.getList().get(ClientSide.getList().size() - 1).setMoney(ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney() + 0.1);
+                loadBetAndMoney();
+            }
+        }
+    }//GEN-LAST:event_lowerButtonActionPerformed
+
+    private void callButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_callButtonActionPerformed
+        if (bettable) {
+            if (ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney() >= callValue - ClientSide.getList().get(ClientSide.getList().size() - 1).getBet()) {
+                ClientSide.getList().get(ClientSide.getList().size() - 1).setMoney(ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney() - (callValue - ClientSide.getList().get(ClientSide.getList().size() - 1).getBet()));
+                ClientSide.getList().get(ClientSide.getList().size() - 1).setBet(callValue);
+                loadBetAndMoney();
+            }
+        }
+    }//GEN-LAST:event_callButtonActionPerformed
+
+    private void foldButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_foldButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_foldButtonActionPerformed
+
+    private void betButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_betButtonActionPerformed
+        if (bettable) {
+            if (callValue > ClientSide.getList().get(ClientSide.getList().size() - 1).getBet()) {
+                JOptionPane.showMessageDialog(ClientSide.getHome(), "Bet Too Low");
+            } else {
+                ClientSide.getOut().printf("bet,%.2f%n", ClientSide.getList().get(ClientSide.getList().size() - 1).getBet());
+                betLabel.setText("Bet");
+                bettable = false;
+            }
+        }
+    }//GEN-LAST:event_betButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel bet;
+    private javax.swing.JButton betButton;
     private javax.swing.JLabel betLabel;
+    private javax.swing.JButton callButton;
+    private javax.swing.JButton foldButton;
+    private javax.swing.JButton lowerButton;
     private javax.swing.JLabel money;
     private javax.swing.JLabel moneyLabel;
+    private javax.swing.JButton raiseButton;
     // End of variables declaration//GEN-END:variables
 }

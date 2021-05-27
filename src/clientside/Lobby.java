@@ -62,6 +62,7 @@ public class Lobby extends javax.swing.JPanel {
             try {
                 while (running.get()) {
                     String input = ClientSide.getIn().readLine();
+                    System.out.println(input);
                     if (input.startsWith("newuser,")) {
                         newUser(input.split(",")[1]);
                     } else if (input.startsWith("quit,")) {

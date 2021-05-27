@@ -33,10 +33,6 @@ public class User {
         return name;
     }
 
-    public void setBet(int bet) {
-        this.bet = bet;
-    }
-
     public void setBet(double bet) {
         this.bet = bet;
     }
