@@ -70,6 +70,7 @@ public class Lobby extends javax.swing.JPanel {
                         JPanel p = ClientSide.getHome().getList().get(2);
                         if (p instanceof Poker) {
                             ((Poker)p).loadPlayers();
+                            ((Poker)p).startListening();
                             ClientSide.getHome().showPanel(2);
                         }
                         stop1();

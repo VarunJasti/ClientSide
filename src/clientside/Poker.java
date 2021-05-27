@@ -6,7 +6,10 @@
 package clientside;
 
 import java.awt.Font;
+import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -20,19 +23,31 @@ public class Poker extends javax.swing.JPanel {
     
     private ArrayList<JLabel> labelList = new ArrayList<>();
     private ArrayList<JLabel> cardList = new ArrayList<>();
+    private ArrayList<JLabel> communityList = new ArrayList<>();
+    private JLabel myCard1;
+    private JLabel myCard2;
+    private Listen listen;
 
     /**
      * Creates new form Poker
      */
     public Poker() {
         initComponents();
-//        ImageIcon img = new ImageIcon(new ImageIcon(ClientSide.class.getResource("Cards/back.png")).getImage().getScaledInstance(65, 100, java.awt.Image.SCALE_SMOOTH));
-//        JLabel card11 = new JLabel(img);
-//        card11.setSize(65,100);
-//        card11.setLocation(650, 335);
-//        add(card11);
+        myCard1 = new JLabel();
+        myCard1.setSize(98, 150);
+        myCard1.setLocation(297, 290);
+        add(myCard1);
+        myCard2 = new JLabel();
+        myCard2.setSize(98, 150);
+        myCard2.setLocation(405, 290);
+        add(myCard2);
         createLabels();
         createCards();
+    }
+    
+    public void startListening() {
+        listen = new Listen();
+        listen.start();
     }
     
     public void createLabels() {
@@ -119,6 +134,27 @@ public class Poker extends javax.swing.JPanel {
             add(card2);
             cardList.add(card2);
         }
+        JLabel card1 = new JLabel();
+        card1.setLocation(218, 130);
+        communityList.add(card1);
+        JLabel card2 = new JLabel();
+        card2.setLocation(293, 130);
+        communityList.add(card2);
+        JLabel card3 = new JLabel();
+        card3.setLocation(368, 130);
+        communityList.add(card3);
+        JLabel card4 = new JLabel();
+        card4.setLocation(443, 130);
+        communityList.add(card4);
+        JLabel card5 = new JLabel();
+        card5.setLocation(518, 130);
+        communityList.add(card5);
+        ImageIcon img = new ImageIcon(new ImageIcon(ClientSide.class.getResource("Cards/back.png")).getImage().getScaledInstance(65, 100, java.awt.Image.SCALE_SMOOTH));
+        for (JLabel card : communityList) {
+            card.setSize(width, height);
+            card.setIcon(img);
+            add(card);
+        }
     }
     
     public void loadPlayers() {
@@ -126,11 +162,13 @@ public class Poker extends javax.swing.JPanel {
         ImageIcon img = new ImageIcon(new ImageIcon(ClientSide.class.getResource("Cards/back.png")).getImage().getScaledInstance(65, 100, java.awt.Image.SCALE_SMOOTH));
         ClientSide.mainPlayerToEnd();
         for (int i = 0; i < ClientSide.getList().size()-1; i++) {
-            labelList.get(i).setText(ClientSide.getList().get(i).getName());
+            labelList.get(i).setText(ClientSide.getList().get(i).getName() + ": " + NumberFormat.getCurrencyInstance().format(ClientSide.getList().get(i).getBet()));
             int j = i*2;
             cardList.get(j).setIcon(img);
             cardList.get(j+1).setIcon(img);
         }
+        money.setText(NumberFormat.getCurrencyInstance().format(ClientSide.getList().get(ClientSide.getList().size()-1).getMoney()));
+        bet.setText(NumberFormat.getCurrencyInstance().format(ClientSide.getList().get(ClientSide.getList().size()-1).getBet()));
     }
     
     private void clearLabel() {
@@ -140,6 +178,36 @@ public class Poker extends javax.swing.JPanel {
         for (JLabel card : cardList) {
             card.setIcon(null);
         }
+    }
+    
+    public void setMyCards() {
+        
+    }
+    
+    class Listen extends Thread {
+        private final AtomicBoolean running = new AtomicBoolean(false);
+        
+        public void stop1() {
+            running.set(false);
+        }
+        
+        @Override
+        public void run() {
+            running.set(true);
+            try {
+                while (running.get()) {
+                    String input = ClientSide.getIn().readLine();
+                    if (input.startsWith("hand")) {
+                        String[] s = input.split("\\|");
+                        myCard1.setIcon(new ImageIcon(new ImageIcon(ClientSide.class.getResource("Cards/" + s[1] + ".png")).getImage().getScaledInstance(98, 150, java.awt.Image.SCALE_SMOOTH)));
+                        myCard2.setIcon(new ImageIcon(new ImageIcon(ClientSide.class.getResource("Cards/" + s[2] + ".png")).getImage().getScaledInstance(98, 150, java.awt.Image.SCALE_SMOOTH)));
+                    }
+                }
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        
     }
 
     /**
@@ -151,19 +219,64 @@ public class Poker extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        money = new javax.swing.JLabel();
+        moneyLabel = new javax.swing.JLabel();
+        betLabel = new javax.swing.JLabel();
+        bet = new javax.swing.JLabel();
+
+        money.setFont(new java.awt.Font("Rockwell", 0, 14)); // NOI18N
+        money.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        money.setText("jLabel1");
+
+        moneyLabel.setFont(new java.awt.Font("Rockwell", 0, 14)); // NOI18N
+        moneyLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        moneyLabel.setText("Money");
+
+        betLabel.setFont(new java.awt.Font("Rockwell", 0, 14)); // NOI18N
+        betLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        betLabel.setText("Bet");
+
+        bet.setFont(new java.awt.Font("Rockwell", 0, 14)); // NOI18N
+        bet.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        bet.setText("jLabel1");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 800, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(297, 297, 297)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(moneyLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(betLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(money, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(bet, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(297, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 450, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(241, 241, 241)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(moneyLabel)
+                    .addComponent(betLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(money)
+                    .addComponent(bet))
+                .addContainerGap(167, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel bet;
+    private javax.swing.JLabel betLabel;
+    private javax.swing.JLabel money;
+    private javax.swing.JLabel moneyLabel;
     // End of variables declaration//GEN-END:variables
 }
