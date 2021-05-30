@@ -6,38 +6,43 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class Lobby extends javax.swing.JPanel {
-    
+
     private Listen listen;
-    
+    private boolean start = true;
+
     public Lobby() {
         initComponents();
     }
-    
+
     public void startListening() {
         listen = new Listen();
         listen.start();
     }
-    
+
     public void loadRoster() {
         String names = "<html>";
         for (int i = 0; i < ClientSide.getList().size(); i++) {
-            if (ClientSide.getList().get(i).isMainPlayer()) names += "<b>";
+            if (ClientSide.getList().get(i).isMainPlayer()) {
+                names += "<b>";
+            }
             if (i == 0) {
                 names += ClientSide.getList().get(i).getName();
             } else {
                 names += "<br/>" + ClientSide.getList().get(i).getName();
             }
-            if (ClientSide.getList().get(i).isMainPlayer()) names += "</b>";
+            if (ClientSide.getList().get(i).isMainPlayer()) {
+                names += "</b>";
+            }
         }
         names += "</html>";
         namesJLabel.setText(names);
     }
-    
+
     public void newUser(String name) {
         ClientSide.getList().add(new User(name));
         loadRoster();
     }
-    
+
     public void userQuit(String name) {
         for (User user : ClientSide.getList()) {
             if (user.equals(name)) {
@@ -47,15 +52,15 @@ public class Lobby extends javax.swing.JPanel {
             }
         }
     }
-    
+
     class Listen extends Thread {
-        
+
         private final AtomicBoolean running = new AtomicBoolean(false);
-        
+
         public void stop1() {
             running.set(false);
         }
-        
+
         @Override
         public void run() {
             running.set(true);
@@ -68,10 +73,13 @@ public class Lobby extends javax.swing.JPanel {
                     } else if (input.startsWith("quit,")) {
                         userQuit(input.split(",")[1]);
                     } else if (input.equals("start")) {
+                        if (start) {
+                            ClientSide.write("startgame");
+                        }
                         JPanel p = ClientSide.getHome().getList().get(2);
                         if (p instanceof Poker) {
-                            ((Poker)p).loadPlayers();
-                            ((Poker)p).startListening();
+                            ((Poker) p).loadPlayers();
+                            ((Poker) p).startListening();
                             ClientSide.getHome().showPanel(2);
                         }
                         stop1();
@@ -166,6 +174,7 @@ public class Lobby extends javax.swing.JPanel {
 
     private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
         ClientSide.write("start");
+        start = false;
     }//GEN-LAST:event_startButtonActionPerformed
 
 

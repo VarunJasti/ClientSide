@@ -20,7 +20,7 @@ import javax.swing.SwingConstants;
  * @author Varun Jasti
  */
 public class Poker extends javax.swing.JPanel {
-    
+
     private ArrayList<JLabel> labelList = new ArrayList<>();
     private ArrayList<JLabel> cardList = new ArrayList<>();
     private ArrayList<JLabel> communityList = new ArrayList<>();
@@ -28,6 +28,7 @@ public class Poker extends javax.swing.JPanel {
     private JLabel myCard2;
     private Listen listen;
     private boolean bettable = false;
+    private boolean call = false;
     private double callValue = 0;
 
     /**
@@ -46,12 +47,12 @@ public class Poker extends javax.swing.JPanel {
         createLabels();
         createCards();
     }
-    
+
     public void startListening() {
         listen = new Listen();
         listen.start();
     }
-    
+
     public void createLabels() {
         int width = 140;
         int height = 15;
@@ -120,7 +121,7 @@ public class Poker extends javax.swing.JPanel {
         add(p9Label);
         labelList.add(p9Label);
     }
-    
+
     public void createCards() {
         int width = 65;
         int height = 100;
@@ -158,7 +159,7 @@ public class Poker extends javax.swing.JPanel {
             add(card);
         }
     }
-    
+
     public void loadPlayers() {
         clearLabel();
         ImageIcon img = new ImageIcon(new ImageIcon(ClientSide.class.getResource("Cards/back.png")).getImage().getScaledInstance(65, 100, java.awt.Image.SCALE_SMOOTH));
@@ -169,10 +170,12 @@ public class Poker extends javax.swing.JPanel {
             cardList.get(j).setIcon(img);
             cardList.get(j + 1).setIcon(img);
         }
-        money.setText(NumberFormat.getCurrencyInstance().format(ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney()));
-        bet.setText(NumberFormat.getCurrencyInstance().format(ClientSide.getList().get(ClientSide.getList().size() - 1).getBet()));
+        setMoney(ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney());
+//        money.setText(NumberFormat.getCurrencyInstance().format(ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney()));
+        setBet(ClientSide.getList().get(ClientSide.getList().size() - 1).getBet());
+//        bet.setText(NumberFormat.getCurrencyInstance().format(ClientSide.getList().get(ClientSide.getList().size() - 1).getBet()));
     }
-    
+
     private void clearLabel() {
         for (JLabel label : labelList) {
             label.setText("");
@@ -181,30 +184,28 @@ public class Poker extends javax.swing.JPanel {
             card.setIcon(null);
         }
     }
-    
+
     public void loadBetAndMoney() {
         bet.setText(NumberFormat.getCurrencyInstance().format(ClientSide.getList().get(ClientSide.getList().size() - 1).getBet()));
         money.setText(NumberFormat.getCurrencyInstance().format(ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney()));
     }
-    
-    public void setMyCards() {
-        
-    }
-    
+
     class Listen extends Thread {
-        
+
         private final AtomicBoolean running = new AtomicBoolean(false);
-        
+
         public void stop1() {
             running.set(false);
         }
-        
+
         @Override
         public void run() {
             running.set(true);
             try {
                 while (running.get()) {
                     String input = ClientSide.getIn().readLine();
+                    System.out.println(input);
+                    System.out.println(communityList.size());
                     if (input.startsWith("hand")) {
                         String[] s = input.split("\\|");
                         myCard1.setIcon(new ImageIcon(new ImageIcon(ClientSide.class.getResource("Cards/" + s[1] + ".png")).getImage().getScaledInstance(98, 150, java.awt.Image.SCALE_SMOOTH)));
@@ -224,6 +225,32 @@ public class Poker extends javax.swing.JPanel {
                                 }
                             }
                         }
+                    } else if (input.startsWith("userfold")) {
+                        for (int i = 0; i < ClientSide.getList().size(); i++) {
+                            if (ClientSide.getList().get(i).getName().equals(input.split(",")[1])) {
+                                if (i != ClientSide.getList().size() - 1) {
+                                    labelList.get(i).setText("<html><strike>" + ClientSide.getList().get(i).getName() + ": " + NumberFormat.getCurrencyInstance().format(ClientSide.getList().get(i).getBet()) + "</strike></html>");
+                                    break;
+                                }
+                            }
+                        }
+                    } else if (input.startsWith("call")) {
+                        bettable = true;
+                        call = true;
+                        betLabel.setText("<html><b>Bet</b></html>");
+                        callValue = Double.parseDouble(input.split(",")[1]);
+                        callButton.setText("Call: " + NumberFormat.getCurrencyInstance().format(callValue));
+                    } else if (input.startsWith("community")) {
+                        String[] s = input.split("\\|");
+                        communityList.get(0).setIcon(new ImageIcon(new ImageIcon(ClientSide.class.getResource("Cards/" + s[1] + ".png")).getImage().getScaledInstance(65, 100, java.awt.Image.SCALE_SMOOTH)));
+                        communityList.get(1).setIcon(new ImageIcon(new ImageIcon(ClientSide.class.getResource("Cards/" + s[2] + ".png")).getImage().getScaledInstance(65, 100, java.awt.Image.SCALE_SMOOTH)));
+                        communityList.get(2).setIcon(new ImageIcon(new ImageIcon(ClientSide.class.getResource("Cards/" + s[3] + ".png")).getImage().getScaledInstance(65, 100, java.awt.Image.SCALE_SMOOTH)));
+                    } else if (input.startsWith("1community")) {
+                        String[] s = input.split("\\|");
+                        communityList.get(3).setIcon(new ImageIcon(new ImageIcon(ClientSide.class.getResource("Cards/" + s[1] + ".png")).getImage().getScaledInstance(65, 100, java.awt.Image.SCALE_SMOOTH)));
+                    } else if (input.startsWith("2community")) {
+                        String[] s = input.split("\\|");
+                        communityList.get(4).setIcon(new ImageIcon(new ImageIcon(ClientSide.class.getResource("Cards/" + s[1] + ".png")).getImage().getScaledInstance(65, 100, java.awt.Image.SCALE_SMOOTH)));
                     }
                 }
             } catch (IOException e) {
@@ -231,7 +258,23 @@ public class Poker extends javax.swing.JPanel {
             }
         }
     }
+    
+    public double readMoney() {
+        return Double.parseDouble(money.getText().replaceAll("\\$", ""));
+    }
+    
+    public double readBet() {
+        return Double.parseDouble(bet.getText().replaceAll("\\$", ""));
+    }
+    
+    public void setBet(double betValue) {
+        bet.setText(NumberFormat.getCurrencyInstance().format(betValue));
+    }
 
+    public void setMoney(double moneyValue) {
+        money.setText(NumberFormat.getCurrencyInstance().format(moneyValue));
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -355,47 +398,65 @@ public class Poker extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void raiseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_raiseButtonActionPerformed
-        if (bettable) {
-            if (ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney() >= 0.1) {
-                ClientSide.getList().get(ClientSide.getList().size() - 1).setBet(ClientSide.getList().get(ClientSide.getList().size() - 1).getBet() + 0.1);
-                ClientSide.getList().get(ClientSide.getList().size() - 1).setMoney(ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney() - 0.1);
-                loadBetAndMoney();
+        if (bettable && (!call)) {
+            if (readMoney() >= 0.1) {
+                setBet(readBet() + 0.1);
+                setMoney(readMoney() - 0.1);
             }
+//            if (ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney() >= 0.1) {
+//                ClientSide.getList().get(ClientSide.getList().size() - 1).setBet(ClientSide.getList().get(ClientSide.getList().size() - 1).getBet() + 0.1);
+//                ClientSide.getList().get(ClientSide.getList().size() - 1).setMoney(ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney() - 0.1);
+//                loadBetAndMoney();
+//            }
         }
     }//GEN-LAST:event_raiseButtonActionPerformed
 
     private void lowerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lowerButtonActionPerformed
-        if (bettable) {
-            if (ClientSide.getList().get(ClientSide.getList().size() - 1).getBet() >= 0.1) {
-                ClientSide.getList().get(ClientSide.getList().size() - 1).setBet(ClientSide.getList().get(ClientSide.getList().size() - 1).getBet() - 0.1);
-                ClientSide.getList().get(ClientSide.getList().size() - 1).setMoney(ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney() + 0.1);
-                loadBetAndMoney();
+        if (bettable && (!call)) {
+            if (readBet() >= 0.1) {
+                setBet(readBet() - 0.1);
+                setMoney(readMoney() + 0.1);
             }
+//            if (ClientSide.getList().get(ClientSide.getList().size() - 1).getBet() >= 0.1) {
+//                ClientSide.getList().get(ClientSide.getList().size() - 1).setBet(ClientSide.getList().get(ClientSide.getList().size() - 1).getBet() - 0.1);
+//                ClientSide.getList().get(ClientSide.getList().size() - 1).setMoney(ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney() + 0.1);
+//                loadBetAndMoney();
+//            }
         }
     }//GEN-LAST:event_lowerButtonActionPerformed
 
     private void callButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_callButtonActionPerformed
         if (bettable) {
-            if (ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney() >= callValue - ClientSide.getList().get(ClientSide.getList().size() - 1).getBet()) {
-                ClientSide.getList().get(ClientSide.getList().size() - 1).setMoney(ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney() - (callValue - ClientSide.getList().get(ClientSide.getList().size() - 1).getBet()));
-                ClientSide.getList().get(ClientSide.getList().size() - 1).setBet(callValue);
-                loadBetAndMoney();
+            if (readMoney() >= callValue) {
+                setMoney(readMoney() - (callValue - readBet()));
+                setBet(callValue);
             }
+//            if (ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney() >= callValue - ClientSide.getList().get(ClientSide.getList().size() - 1).getBet()) {
+//                ClientSide.getList().get(ClientSide.getList().size() - 1).setMoney(ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney() - (callValue - ClientSide.getList().get(ClientSide.getList().size() - 1).getBet()));
+//                ClientSide.getList().get(ClientSide.getList().size() - 1).setBet(callValue);
+//                loadBetAndMoney();
+//            }
         }
     }//GEN-LAST:event_callButtonActionPerformed
 
     private void foldButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_foldButtonActionPerformed
-        // TODO add your handling code here:
+        ClientSide.write("fold");
+        betLabel.setText("Bet");
+        loadBetAndMoney();
+        bettable = false;
     }//GEN-LAST:event_foldButtonActionPerformed
 
     private void betButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_betButtonActionPerformed
         if (bettable) {
-            if (callValue > ClientSide.getList().get(ClientSide.getList().size() - 1).getBet()) {
+            if (callValue > readBet()) {
                 JOptionPane.showMessageDialog(ClientSide.getHome(), "Bet Too Low");
             } else {
+                ClientSide.getList().get(ClientSide.getList().size() - 1).setBet(readBet());
+                ClientSide.getList().get(ClientSide.getList().size() - 1).setMoney(readMoney());
                 ClientSide.getOut().printf("bet,%.2f%n", ClientSide.getList().get(ClientSide.getList().size() - 1).getBet());
                 betLabel.setText("Bet");
                 bettable = false;
+                call = false;
             }
         }
     }//GEN-LAST:event_betButtonActionPerformed
