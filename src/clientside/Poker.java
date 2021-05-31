@@ -205,7 +205,6 @@ public class Poker extends javax.swing.JPanel {
                 while (running.get()) {
                     String input = ClientSide.getIn().readLine();
                     System.out.println(input);
-                    System.out.println(communityList.size());
                     if (input.startsWith("hand")) {
                         String[] s = input.split("\\|");
                         myCard1.setIcon(new ImageIcon(new ImageIcon(ClientSide.class.getResource("Cards/" + s[1] + ".png")).getImage().getScaledInstance(98, 150, java.awt.Image.SCALE_SMOOTH)));
@@ -251,6 +250,17 @@ public class Poker extends javax.swing.JPanel {
                     } else if (input.startsWith("2community")) {
                         String[] s = input.split("\\|");
                         communityList.get(4).setIcon(new ImageIcon(new ImageIcon(ClientSide.class.getResource("Cards/" + s[1] + ".png")).getImage().getScaledInstance(65, 100, java.awt.Image.SCALE_SMOOTH)));
+                    } else if (input.startsWith("usercard")) {
+                        for (int i = 0; i < ClientSide.getList().size(); i++) {
+                            if (ClientSide.getList().get(i).getName().equals(input.split("\\.")[1])) {
+                                if (i != ClientSide.getList().size() - 1) {
+                                    System.out.println("Cards/" + input.split("\\.")[2].split("\\|")[1] + ".png");
+                                    cardList.get(i * 2).setIcon(new ImageIcon(new ImageIcon(ClientSide.class.getResource("Cards/" + input.split("\\.")[2].split("\\|")[1] + ".png")).getImage().getScaledInstance(65, 100, java.awt.Image.SCALE_SMOOTH)));
+                                    cardList.get((i * 2)+1).setIcon(new ImageIcon(new ImageIcon(ClientSide.class.getResource("Cards/" + input.split("\\.")[2].split("\\|")[2] + ".png")).getImage().getScaledInstance(65, 100, java.awt.Image.SCALE_SMOOTH)));
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
             } catch (IOException e) {
