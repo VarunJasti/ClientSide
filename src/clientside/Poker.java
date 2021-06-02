@@ -170,10 +170,9 @@ public class Poker extends javax.swing.JPanel {
             cardList.get(j).setIcon(img);
             cardList.get(j + 1).setIcon(img);
         }
-        setMoney(ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney());
-//        money.setText(NumberFormat.getCurrencyInstance().format(ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney()));
-        setBet(ClientSide.getList().get(ClientSide.getList().size() - 1).getBet());
-//        bet.setText(NumberFormat.getCurrencyInstance().format(ClientSide.getList().get(ClientSide.getList().size() - 1).getBet()));
+//        setMoney(ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney());
+//        setBet(ClientSide.getList().get(ClientSide.getList().size() - 1).getBet());
+        loadBetAndMoney();
     }
 
     private void clearLabel() {
@@ -186,8 +185,10 @@ public class Poker extends javax.swing.JPanel {
     }
 
     public void loadBetAndMoney() {
-        bet.setText(NumberFormat.getCurrencyInstance().format(ClientSide.getList().get(ClientSide.getList().size() - 1).getBet()));
-        money.setText(NumberFormat.getCurrencyInstance().format(ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney()));
+        setBet(ClientSide.getList().get(ClientSide.getList().size() - 1).getBet());
+        setMoney(ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney());
+//        bet.setText(NumberFormat.getCurrencyInstance().format(ClientSide.getList().get(ClientSide.getList().size() - 1).getBet()));
+//        money.setText(NumberFormat.getCurrencyInstance().format(ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney()));
     }
 
     class Listen extends Thread {
@@ -209,6 +210,12 @@ public class Poker extends javax.swing.JPanel {
                         String[] s = input.split("\\|");
                         myCard1.setIcon(new ImageIcon(new ImageIcon(ClientSide.class.getResource("Cards/" + s[1] + ".png")).getImage().getScaledInstance(98, 150, java.awt.Image.SCALE_SMOOTH)));
                         myCard2.setIcon(new ImageIcon(new ImageIcon(ClientSide.class.getResource("Cards/" + s[2] + ".png")).getImage().getScaledInstance(98, 150, java.awt.Image.SCALE_SMOOTH)));
+                        ImageIcon img = new ImageIcon(new ImageIcon(ClientSide.class.getResource("Cards/back.png")).getImage().getScaledInstance(65, 100, java.awt.Image.SCALE_SMOOTH));
+                        for (JLabel card : communityList) {
+                            card.setIcon(img);
+                        }
+                        ClientSide.getList().get(ClientSide.getList().size() - 1).setBet(0);
+                        loadPlayers();
                     } else if (input.startsWith("bet")) {
                         bettable = true;
                         betLabel.setText("<html><b>Bet</b></html>");
@@ -256,7 +263,7 @@ public class Poker extends javax.swing.JPanel {
                                 if (i != ClientSide.getList().size() - 1) {
                                     System.out.println("Cards/" + input.split("\\.")[2].split("\\|")[1] + ".png");
                                     cardList.get(i * 2).setIcon(new ImageIcon(new ImageIcon(ClientSide.class.getResource("Cards/" + input.split("\\.")[2].split("\\|")[1] + ".png")).getImage().getScaledInstance(65, 100, java.awt.Image.SCALE_SMOOTH)));
-                                    cardList.get((i * 2)+1).setIcon(new ImageIcon(new ImageIcon(ClientSide.class.getResource("Cards/" + input.split("\\.")[2].split("\\|")[2] + ".png")).getImage().getScaledInstance(65, 100, java.awt.Image.SCALE_SMOOTH)));
+                                    cardList.get((i * 2) + 1).setIcon(new ImageIcon(new ImageIcon(ClientSide.class.getResource("Cards/" + input.split("\\.")[2].split("\\|")[2] + ".png")).getImage().getScaledInstance(65, 100, java.awt.Image.SCALE_SMOOTH)));
                                     break;
                                 }
                             }
@@ -266,6 +273,11 @@ public class Poker extends javax.swing.JPanel {
                         ClientSide.getList().get(ClientSide.getList().size() - 1).setMoney(pot + ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney());
                         JOptionPane.showMessageDialog(ClientSide.getHome(), "You Won!!!\n" + NumberFormat.getCurrencyInstance().format(pot));
                         loadBetAndMoney();
+                    } else if (input.startsWith("endgame")) {
+                        JOptionPane.showMessageDialog(ClientSide.getHome(), input.split(",")[1] + " Disconnected");
+                        ClientSide.disconnect();
+                        listen.stop1();
+                        ClientSide.getHome().showPanel(0);
                     }
                 }
             } catch (IOException e) {
@@ -273,15 +285,15 @@ public class Poker extends javax.swing.JPanel {
             }
         }
     }
-    
+
     public double readMoney() {
         return Double.parseDouble(money.getText().replaceAll("\\$", ""));
     }
-    
+
     public double readBet() {
         return Double.parseDouble(bet.getText().replaceAll("\\$", ""));
     }
-    
+
     public void setBet(double betValue) {
         bet.setText(NumberFormat.getCurrencyInstance().format(betValue));
     }
@@ -289,7 +301,7 @@ public class Poker extends javax.swing.JPanel {
     public void setMoney(double moneyValue) {
         money.setText(NumberFormat.getCurrencyInstance().format(moneyValue));
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
