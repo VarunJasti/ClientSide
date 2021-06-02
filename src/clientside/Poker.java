@@ -30,6 +30,7 @@ public class Poker extends javax.swing.JPanel {
     private boolean bettable = false;
     private boolean call = false;
     private double callValue = 0;
+    private boolean won = false;
 
     /**
      * Creates new form Poker
@@ -273,11 +274,18 @@ public class Poker extends javax.swing.JPanel {
                         ClientSide.getList().get(ClientSide.getList().size() - 1).setMoney(pot + ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney());
                         JOptionPane.showMessageDialog(ClientSide.getHome(), "You Won!!!\n" + NumberFormat.getCurrencyInstance().format(pot));
                         loadBetAndMoney();
+                        won = true;
                     } else if (input.startsWith("endgame")) {
                         JOptionPane.showMessageDialog(ClientSide.getHome(), input.split(",")[1] + " Disconnected");
                         ClientSide.disconnect();
                         listen.stop1();
                         ClientSide.getHome().showPanel(0);
+                    } else if (input.startsWith("userwin")) {
+                        if (!won) {
+                            JOptionPane.showMessageDialog(ClientSide.getHome(), input.split("\\|")[1].substring(0, input.split("\\|")[1].length() - 2) + " Won!!");
+                        } else {
+                            won = false;
+                        }
                     }
                 }
             } catch (IOException e) {
