@@ -261,6 +261,11 @@ public class Poker extends javax.swing.JPanel {
                                 }
                             }
                         }
+                    } else if (input.startsWith("win")) {
+                        double pot = Double.parseDouble(input.split(",")[1]);
+                        ClientSide.getList().get(ClientSide.getList().size() - 1).setMoney(pot + ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney());
+                        JOptionPane.showMessageDialog(ClientSide.getHome(), "You Won!!!\n" + NumberFormat.getCurrencyInstance().format(pot));
+                        loadBetAndMoney();
                     }
                 }
             } catch (IOException e) {
@@ -413,11 +418,6 @@ public class Poker extends javax.swing.JPanel {
                 setBet(readBet() + 0.1);
                 setMoney(readMoney() - 0.1);
             }
-//            if (ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney() >= 0.1) {
-//                ClientSide.getList().get(ClientSide.getList().size() - 1).setBet(ClientSide.getList().get(ClientSide.getList().size() - 1).getBet() + 0.1);
-//                ClientSide.getList().get(ClientSide.getList().size() - 1).setMoney(ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney() - 0.1);
-//                loadBetAndMoney();
-//            }
         }
     }//GEN-LAST:event_raiseButtonActionPerformed
 
@@ -427,11 +427,6 @@ public class Poker extends javax.swing.JPanel {
                 setBet(readBet() - 0.1);
                 setMoney(readMoney() + 0.1);
             }
-//            if (ClientSide.getList().get(ClientSide.getList().size() - 1).getBet() >= 0.1) {
-//                ClientSide.getList().get(ClientSide.getList().size() - 1).setBet(ClientSide.getList().get(ClientSide.getList().size() - 1).getBet() - 0.1);
-//                ClientSide.getList().get(ClientSide.getList().size() - 1).setMoney(ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney() + 0.1);
-//                loadBetAndMoney();
-//            }
         }
     }//GEN-LAST:event_lowerButtonActionPerformed
 
@@ -441,11 +436,6 @@ public class Poker extends javax.swing.JPanel {
                 setMoney(readMoney() - (callValue - readBet()));
                 setBet(callValue);
             }
-//            if (ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney() >= callValue - ClientSide.getList().get(ClientSide.getList().size() - 1).getBet()) {
-//                ClientSide.getList().get(ClientSide.getList().size() - 1).setMoney(ClientSide.getList().get(ClientSide.getList().size() - 1).getMoney() - (callValue - ClientSide.getList().get(ClientSide.getList().size() - 1).getBet()));
-//                ClientSide.getList().get(ClientSide.getList().size() - 1).setBet(callValue);
-//                loadBetAndMoney();
-//            }
         }
     }//GEN-LAST:event_callButtonActionPerformed
 
