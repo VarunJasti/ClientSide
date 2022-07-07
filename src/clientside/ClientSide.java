@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 
 public class ClientSide {
     
-    private final static String HOST = "104.209.44.90";
+    private final static String HOST = ""; //IP Address
     private final static int PORT = 4444;
     private static Socket server;
     private static BufferedReader in;
